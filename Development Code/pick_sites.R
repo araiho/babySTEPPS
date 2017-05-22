@@ -409,7 +409,7 @@ calc.second.deriv <- function(biomassCI,h,second.deriv){
 	if(length(biomassCI[[i]])>10){
 		T <- dim(biomassCI[[i]])[2] - h
 		t <- h + 1 
-		biomassCI[[i]]<-log(biomassCI[[i]])
+		biomassCI[[i]]<-(biomassCI[[i]])
 		second.deriv[[i]]<-sum(((biomassCI[[i]][2,(t:T)+h]-2*biomassCI[[i]][2,(t:T)]+biomassCI[[i]][2,(t:T)-h])/((h*100)^2))^2)
 		
 	}else{
@@ -426,7 +426,7 @@ second.deriv<-calc.second.deriv(biomassCI=biomassCI,h=h,second.deriv=list())
 #hist(unlist(second.deriv))
 names(second.deriv) <- unique(x.meta[,1])[1:182]
 second.deriv.unlist <- unlist(second.deriv)
-second.deriv.unlist <- second.deriv.unlist[plot.which.keep]
+#second.deriv.unlist <- second.deriv.unlist[plot.which.keep]
 #rownames(calc.all1)<-seq(1,34,1)
 second.deriv.copy <- second.deriv
 second.deriv.unlist.names <- unlist(second.deriv.copy)

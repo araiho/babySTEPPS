@@ -5,7 +5,7 @@ library(analogue)
 
 setwd("/Users/paleolab/babySTEPPS/")
 
-load("min.list.june24.Rdata")
+load("/Users/paleolab/babySTEPPS/nimbleRuns/min.list.june24.Rdata")
 load(file="/Users/paleolab/babySTEPPS/Data/pol.cal.count.mnwi1.csv") 
 
 training = prop.table(as.matrix(ten.count),1)
@@ -80,7 +80,11 @@ dev.off()
 
 
 
-
+#Cub Lake #Site 518
+testing1 <- ten.count[testing.meta$SiteID==518,]
+analog2 <- analog(x=training,y=testing1,'SQchord')
+sum.analog2 <- summary(analog2)
+sum.analog2
 
 
 

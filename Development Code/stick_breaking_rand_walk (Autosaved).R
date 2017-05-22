@@ -392,13 +392,13 @@ for(i in 2:183){
 }
 
 
-only.means[only.means>200] <- NA
+names(only.means.all)<-unique(x.meta$site.id)[1:182]
 
 breaks <-  c(seq(0,50,10),seq(75,200,25))
 colors <- rev(terrain.colors(length(breaks)))
 
-pdf(paste0('pred.points.map.fewer',Sys.Date(),'.pdf'))
-for(r in seq(1,99,length.out=15)){
+pdf(paste0('pred.points.map',Sys.Date(),'.pdf'))
+for(r in seq(1,99,1)){
   
   only.means <- unlist(lapply(only.means.all,function(x){return(x[r])}))
   

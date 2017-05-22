@@ -51,10 +51,10 @@ ciEnvelope(as.numeric(temp$V1),na.omit(as.numeric(temp$V2)-as.numeric(temp$V2)*a
 
 #run stuff in pick.sites.R
 
-	  plot(seq(100,9900,100),biomassCI[[i]][2,],cex=.1,ylim=c(0,150),xlim=c(-10,10000),ylab="Biomass (Mg / Ha)",xlab="Years BP",main='Biomass')
+	  plot(seq(100,9900,100),biomassCI[[i]][2,],cex=.1,ylim=c(0,150),xlim=rev(-10,10000),ylab="Biomass (Mg / Ha)",xlab="Years BP",main='Biomass')
       #title(x.meta[x.meta[,1]== site.id.list[i],5][1],outer=TRUE)
       #axis(3,at=seq(0,10000,1000),labels=seq(0,10000,1000),padj=1)
-for(i in plot.which.keep){
+for(i in 1:182){
       #ciEnvelope(seq(100,9900,100),biomassCI[[i]][1,],biomassCI[[i]][3,],col=colors[dbs[i]])
       if(length(biomassCI[[i]])>2){
 	      plot.col <- cut(calc.all1[calc.all1$SiteID==names(biomassCI)[i],27], c(breaks), include.lowest = FALSE, labels = FALSE)

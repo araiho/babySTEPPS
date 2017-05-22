@@ -124,12 +124,12 @@ age_slice = 300
 diff_map_plor <- function(age_slice){
 
   pred_data = cbind(biomass_dat5[,1:2],rep(age_slice,nrow(biomass_dat5)))
-  colnames(pred_data)<- c("x","y","Age")
+  colnames(pred_data)<- c("x","y","age_bacon")
   pred_biomass_gam = exp(predict(b,newdata = as.data.frame(pred_data)))
   #hist(pred_biomass_gam)
 
 for(i in 1:length(pred_biomass_gam)){
-  if(pred_biomass_gam[i]>400) pred_biomass_gam[i] = 400
+  if(pred_biomass_gam[i]>200) pred_biomass_gam[i] = 200
 }
 
 full.mat <- cbind(biomass_dat5[,1:2],as.vector(pred_biomass_gam))
@@ -142,11 +142,11 @@ legendName <- c("Biomass (Mg/ha)")#paste0("Biomass at Age = ",age_slice, " BP")
 
 biomass_dat_est <- read.csv(paste0(data.dir,"biomass_prediction_v0.2.csv"))
 xiao_ests <- rowSums(biomass_dat_est[,4:23])
-breaks <-  c(-300, -200, -100, 100, 200, 300, 400, 500, 600)
-colors <- c("blue", "light blue", "white", "pink","darkred", "red","orange","yellow")
-legendName <- paste0("Xiao - Pred at ", age_slice)
+#breaks <-  c(-300, -200, -100, 100, 200, 300, 400, 500, 600)
+#colors <- c("blue", "light blue", "white", "pink","darkred", "red","orange","yellow")
+legendName <- c('Biomass (Mg/ha)')
 
-data_binned <-  cut(xiao_ests, breaks, include.lowest = TRUE, labels = FALSE)
+data_binned <-  cut(pred_biomass_gam, breaks, include.lowest = TRUE, labels = FALSE)
 
 breaklabels <- apply(cbind(breaks[1:(length(breaks)-1)], breaks[2:length(breaks)]), 1,  function(r) { sprintf("%0.2f - %0.2f", r[1], r[2]) })
 
@@ -154,13 +154,13 @@ inputData <- data.frame(X = y[,1], Y = y[,2], Preds = cbind(data_binned,data_bin
 inputData_long <- melt(inputData, c('X', 'Y'))
 
 colnames(centers_polA) <- c('lat','lon')
-input_points <- data.frame(centers_polA[all.preds1$Age >(age_slice-50)&all.preds1$Age <(age_slice+50),])
+input_points <- data.frame(centers_polA[all.preds2$age_bacon >(age_slice-50)&all.preds2$age_bacon <(age_slice+50),])
 
 d <- ggplot() + geom_raster(data = inputData_long, aes(x = X, y = Y, fill = factor(value))) +
   scale_fill_manual(labels = breaklabels, name = legendName, drop = FALSE, values = colors, guide = "legend") + 
   theme(strip.text.x = element_text(size = 16), legend.text = element_text(size = 16), legend.title = element_text(size = 16)) + #legend.position="none" removes legend
   geom_point(data = input_points, aes(x=lat,y=lon), pch=16, size=2,colour="black") +
-  ggtitle("Xiaoping's Biomass Estimates")#paste0("Pred Map ","at Age = ",age_slice, " BP")
+  ggtitle(paste("Biomass Estimates at",age_slice))#paste0("Pred Map ","at Age = ",age_slice, " BP")
 
 add_map_albers <- function(plot_obj, map_data = usFortified, dat){
   p <- plot_obj + geom_path(data = map_data, aes(x = long, y = lat, group = group), size = 0.1) +
@@ -175,8 +175,19 @@ return(d)
 quartz()
 print(d)
 
+d_2000 <- diff_map_plor(2000)
+d_4000 <- diff_map_plor(4000)
+d_6000 <- diff_map_plor(6000)
+d_8000 <- diff_map_plor(8000)
+pdf('smooth.maps2k.6k.pdf')
+grid.arrange(d_6000,d_2000)
+dev.off()
+pdf('smooth.maps4k.8k.pdf')
+grid.arrange(d_8000,d_4000)
+dev.off()
 
 d_200 = diff_map_plor(200)
+print(d_200)
 d_300 = diff_map_plor(300)
 d_400 = diff_map_plor(400)
 d_500 = diff_map_plor(500)
